@@ -6,6 +6,28 @@ config OTA_URL
     help
         The application will access this URL to check for new firmwares and server address.
 
+config STACKCHAN_SKIP_CLOUD_VERSION_CHECK
+    bool "Skip the upstream xiaozhi cloud version check"
+    default y if BOARD_TYPE_STACKCHAN
+    default n
+    help
+        When enabled and NVS wifi.ota_url is empty, the boot-time version
+        check against CONFIG_OTA_URL (the upstream xiaozhi cloud) is
+        skipped and the running image is marked valid immediately.
+
+        The stackchan-mcp build never takes firmware or server settings
+        from that cloud: firmware updates go through the gateway's
+        upgrade_firmware tool, and the WebSocket URL is owned by the user.
+        When the cloud is unreachable from the robot, the check retries
+        10 times with doubling delays (10 s, 20 s, 40 s, ...) before the
+        WebSocket protocol starts, which keeps the robot away from the
+        gateway for well over an hour on every boot.
+
+        Setting NVS wifi.ota_url (for example via the Wi-Fi setup page)
+        re-enables the check against that URL. The gateway serves a
+        "no update" answer at http://<gateway>:<CAPTURE_PORT>/ota/ for
+        devices running older firmware that still perform the check.
+
 config DISABLE_OTA_WEBSOCKET_CONFIG
     bool "Ignore the websocket section of the OTA response"
     default y

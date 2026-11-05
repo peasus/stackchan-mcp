@@ -196,7 +196,11 @@ class FasterWhisperEngine(STTEngine):
                 BytesIO(wav_bytes),
                 language=language,
                 beam_size=1,
-                vad_filter=False,
+                # Skip silent stretches. Without this, Whisper spends most
+                # of its time on silence (slow on CPU-only hosts such as a
+                # Raspberry Pi) and tends to hallucinate filler such as
+                # "You" or "Thank you" on quiet clips.
+                vad_filter=True,
             )
             # ``segments`` is a generator; materialising it concatenates
             # all chunks of the transcription.

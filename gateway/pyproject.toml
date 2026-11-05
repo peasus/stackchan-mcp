@@ -103,6 +103,10 @@ stt = [
 stt-faster-whisper = [
     "stackchan-mcp[stt]",
     "faster-whisper>=1.0",
+    # faster-whisper decodes audio through PyAV. A fresh install on a
+    # Raspberry Pi 4 (arm64, Python 3.13) resolved PyAV 19 and transcription
+    # failed; 14.x-17.x work. Cap below 19 until faster-whisper catches up.
+    "av>=11,<19",
 ]
 stt-openai = [
     "stackchan-mcp[stt]",

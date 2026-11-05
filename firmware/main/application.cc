@@ -417,6 +417,20 @@ void Application::CheckAssetsVersion() {
 }
 
 void Application::CheckNewVersion() {
+#if CONFIG_STACKCHAN_SKIP_CLOUD_VERSION_CHECK
+    {
+        // stackchan-mcp: the upstream cloud is never the source of firmware
+        // or server settings for this build. Only run the check when the
+        // user explicitly configured an OTA URL. See Kconfig help.
+        Settings settings("wifi", false);
+        if (settings.GetString("ota_url").empty()) {
+            ESP_LOGI(TAG, "No ota_url configured, skipping cloud version check");
+            ota_->MarkCurrentVersionValid();
+            return;
+        }
+    }
+#endif
+
     const int MAX_RETRY = 10;
     int retry_count = 0;
     int retry_delay = 10; // Initial retry delay in seconds

@@ -499,6 +499,28 @@ async def handle_pcm(request: web.Request) -> web.Response:
     return web.Response(text=json.dumps(result), content_type="application/json")
 
 
+async def handle_ota_check(request: web.Request) -> web.Response:
+    """Answer the firmware's boot-time version check with "nothing to do".
+
+    The xiaozhi-derived firmware POSTs (or GETs) its system info to
+    ``ota_url`` before it starts the WebSocket protocol, and retries with
+    doubling delays when the upstream cloud is unreachable. Pointing NVS
+    ``wifi.ota_url`` at ``http://<gateway>:<CAPTURE_PORT>/ota/`` makes the
+    check succeed immediately. An empty JSON object carries no firmware,
+    activation, mqtt or websocket section, so the firmware marks the
+    running image valid and moves on. Firmware updates stay with the
+    ``upgrade_firmware`` tool.
+    """
+    if request.can_read_body:
+        # Drain the system-info body; its content is not needed.
+        await request.read()
+    logger.info(
+        "OTA version check from %s answered with no-update",
+        request.headers.get("Device-Id", request.remote or "unknown"),
+    )
+    return web.json_response({})
+
+
 def create_capture_app(
     capture_token: str = "",
     pcm_token: str = "",
@@ -548,4 +570,6 @@ def create_capture_app(
     app.router.add_get("/avatar_set/{short_id}", handle_avatar_set_fetch)
     app.router.add_get("/firmware/{image_id}", handle_firmware_fetch)
     app.router.add_post("/pcm", handle_pcm)
+    app.router.add_route("*", "/ota/", handle_ota_check)
+    app.router.add_route("*", "/ota", handle_ota_check)
     return app
