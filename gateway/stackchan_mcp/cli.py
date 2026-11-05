@@ -112,7 +112,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Disable mDNS/DNS-SD advertisement for the WebSocket endpoint.",
     )
-    subparsers = parser.add_subparsers(dest="command", metavar="{serve}")
+    subparsers = parser.add_subparsers(dest="command", metavar="{serve,provision}")
     serve_parser = subparsers.add_parser(
         "serve",
         help="Start the StackChan gateway.",
@@ -131,6 +131,18 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Disable mDNS/DNS-SD advertisement for the WebSocket endpoint.",
     )
+    provision_parser = subparsers.add_parser(
+        "provision",
+        help="Write Wi-Fi and gateway settings to the robot over USB.",
+        description=(
+            "Write Wi-Fi credentials, the gateway WebSocket URL and token to "
+            "a USB-connected robot, skipping the phone setup hotspot. Needs "
+            "the 'provision' extra."
+        ),
+    )
+    from . import provision as _provision
+
+    _provision.add_arguments(provision_parser)
     return parser
 
 
@@ -984,6 +996,12 @@ def main(argv: list[str] | None = None) -> None:
     if args.command is None:
         _run_stdio_gateway(advertise_mdns=not args.no_mdns)
         return
+
+    if args.command == "provision":
+        from . import provision
+
+        _load_dotenv()
+        sys.exit(provision.run(args))
 
     if args.command == "serve":
         advertise_mdns = not (args.no_mdns or getattr(args, "serve_no_mdns", False))

@@ -285,10 +285,25 @@ There are four practical ways to provide them, plus one temporary source-level e
    on the next reconnect. Changes are persisted immediately but do not trigger
    a disconnect, reconnect, or reboot.
 
-4. **Write `websocket.url` / `websocket.fallback_url` / `websocket.token`
-   directly to NVS** (advanced): for example with a custom NVS-write tool
-   over serial. Same persistence semantics as the WiFi config UI and runtime
-   MCP tools; primarily useful for batch provisioning.
+4. **Write the settings over USB with `stackchan-mcp provision`**: when the
+   WiFi config hotspot does not work with your phone, plug the robot into
+   the gateway host and run:
+
+   ```bash
+   uv tool install --force 'stackchan-mcp[provision]'   # adds esptool + NVS generator
+   stackchan-mcp provision --ssid "<your 2.4 GHz network>"
+   ```
+
+   It prompts for the Wi-Fi password (or reads `STACKCHAN_WIFI_PASSWORD`),
+   takes the token from `STACKCHAN_TOKEN`, and writes `wifi.ssid` /
+   `wifi.password`, `websocket.url` (`ws://<detected LAN IP>:<WS_PORT>/`),
+   `websocket.token`, and `wifi.ota_url` pointing at the gateway's
+   "no update" endpoint. The whole NVS partition is replaced (volume and
+   touch tuning return to defaults); the old one is saved under
+   `~/.stackchan/backups/` first. Use `--dry-run` to preview and
+   `--gateway-host` / `--port` to override detection. You can also build
+   an NVS image yourself with Espressif's `esp-idf-nvs-partition-gen`;
+   the same keys apply.
 
 5. **Temporary source hardcode (not recommended)**: editing
    `websocket_protocol.cc` can unblock local experiments, but keep it out of

@@ -113,6 +113,15 @@ stt-openai = [
     "openai>=1.0",
 ]
 
+# `stackchan-mcp provision` writes Wi-Fi and gateway settings to the robot's
+# NVS partition over USB. esptool flashes; esp-idf-nvs-partition-gen builds
+# the NVS image. Both are Espressif tools (GPL-2.0 / Apache-2.0) run as
+# separate processes.
+provision = [
+    "esptool>=5",
+    "esp-idf-nvs-partition-gen>=0.1",
+]
+
 [project.urls]
 Homepage = "https://github.com/kisaragi-mochi/stackchan-mcp"
 Repository = "https://github.com/kisaragi-mochi/stackchan-mcp"
