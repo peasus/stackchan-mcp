@@ -572,4 +572,7 @@ def create_capture_app(
     app.router.add_post("/pcm", handle_pcm)
     app.router.add_route("*", "/ota/", handle_ota_check)
     app.router.add_route("*", "/ota", handle_ota_check)
+    # Same path as the upstream xiaozhi OTA URL, for setups that only
+    # swapped the host in an existing ota_url.
+    app.router.add_route("*", "/xiaozhi/ota/", handle_ota_check)
     return app

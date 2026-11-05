@@ -276,7 +276,7 @@ async def test_capture_tolerates_non_utf8_question(tmp_path, monkeypatch):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("path", ["/ota/", "/ota"])
+@pytest.mark.parametrize("path", ["/ota/", "/ota", "/xiaozhi/ota/"])
 @pytest.mark.parametrize("method", ["GET", "POST"])
 async def test_ota_check_answers_no_update(path, method):
     """The version check gets an empty JSON object, with no auth needed."""
