@@ -32,6 +32,15 @@ documented-only.
 
 ### Gateway
 
+- Answer the firmware's boot-time version check at `/ota/` on the capture
+  port with an empty "no update" response. Robots that cannot reach the
+  upstream xiaozhi cloud no longer stall for over an hour on every boot when
+  NVS `wifi.ota_url` points at `http://<gateway>:<CAPTURE_PORT>/ota/`.
+- Enable faster-whisper's VAD filter. Silent stretches are skipped, which
+  makes transcription much faster on CPU-only hosts such as a Raspberry Pi
+  and stops "You" / "Thank you" hallucinations on quiet clips.
+- Cap PyAV below 19 in the `stt-faster-whisper` extra; a fresh install that
+  resolved PyAV 19 broke transcription on a Raspberry Pi 4.
 - Add `upgrade_firmware(firmware_path)` to flash a local `xiaozhi.bin` over
   Wi-Fi without USB. Before contacting the device the gateway checks the
   image (ESP32-S3 app image, project `xiaozhi`, board name, appended
@@ -53,6 +62,14 @@ documented-only.
 
 - `firmware/scripts/Image_Converter`: Pillow 11.3.0 -> 13.0.0 (security
   advisories). The converter already uses `Image.Resampling.LANCZOS`.
+
+### Firmware
+
+- Skip the upstream xiaozhi cloud version check at boot when NVS
+  `wifi.ota_url` is empty (new `CONFIG_STACKCHAN_SKIP_CLOUD_VERSION_CHECK`,
+  on by default for the stackchan board). When the cloud was unreachable the
+  check retried 10 times with doubling delays before the WebSocket protocol
+  started, keeping the robot away from the gateway for well over an hour.
 
 ## [0.20.0] - 2026-10-23
 

@@ -268,3 +268,27 @@ async def test_capture_tolerates_non_utf8_question(tmp_path, monkeypatch):
             )
             resp = await client.post("/capture", data=mpwriter)
         assert resp.status == 200, await resp.text()
+
+
+# ---------------------------------------------------------------------------
+# /ota/ — firmware boot-time version check
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("path", ["/ota/", "/ota", "/xiaozhi/ota/"])
+@pytest.mark.parametrize("method", ["GET", "POST"])
+async def test_ota_check_answers_no_update(path, method):
+    """The version check gets an empty JSON object, with no auth needed."""
+    from aiohttp.test_utils import TestClient, TestServer
+
+    app = create_capture_app(capture_token="capture-token")
+    async with TestClient(TestServer(app)) as client:
+        kwargs = {}
+        if method == "POST":
+            kwargs["json"] = {"application": {"version": "2.2.6"}}
+        resp = await client.request(
+            method, path, headers={"Device-Id": "44:1b:f6:e5:5c:d4"}, **kwargs
+        )
+        assert resp.status == 200
+        assert await resp.json() == {}

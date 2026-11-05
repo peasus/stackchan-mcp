@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
@@ -2298,6 +2298,7 @@ stt = [
     { name = "opuslib" },
 ]
 stt-faster-whisper = [
+    { name = "av" },
     { name = "faster-whisper" },
     { name = "opuslib" },
 ]
@@ -2338,6 +2339,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "aiohttp", specifier = ">=3" },
+    { name = "av", marker = "extra == 'stt-faster-whisper'", specifier = ">=11,<19" },
     { name = "faster-whisper", marker = "extra == 'stt-faster-whisper'", specifier = ">=1.0" },
     { name = "httpx", marker = "extra == 'tts'", specifier = ">=0.27" },
     { name = "mcp", specifier = ">=1.27,<2.0" },
