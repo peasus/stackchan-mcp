@@ -32,6 +32,10 @@ documented-only.
 
 ### Gateway
 
+- Add `stackchan-mcp provision` (with the new `provision` extra) to write
+  Wi-Fi credentials, the gateway WebSocket URL and token, and an `ota_url`
+  pointing at the gateway to a USB-connected robot, skipping the phone
+  setup hotspot. The current NVS partition is backed up first.
 - Answer the firmware's boot-time version check at `/ota/` on the capture
   port with an empty "no update" response. Robots that cannot reach the
   upstream xiaozhi cloud no longer stall for over an hour on every boot when

@@ -547,6 +547,59 @@ wheels = [
 ]
 
 [[package]]
+name = "esp-idf-nvs-partition-gen"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+    { name = "esp-pylib", extra = ["cli"] },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/84/c9/50173df772d5a0fffda5398247af1f8441b4378bbe45723fbccffbb0dd94/esp_idf_nvs_partition_gen-0.3.0.tar.gz", hash = "sha256:8394c0e5259f27f01104279371960e52e5bea708c5c0baae3b7dc5e521768d5d", size = 24497, upload-time = "2026-07-21T09:23:53.09Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/36/40/9f64c3f4e046206900f65810ed95eaa168de90192b132ae5bde52c0b18b4/esp_idf_nvs_partition_gen-0.3.0-py3-none-any.whl", hash = "sha256:071c09b838cacb5562362e18e1cdf056d86a2611bb99e7d50de2b5054de33ac9", size = 22527, upload-time = "2026-07-21T09:23:52.284Z" },
+]
+
+[[package]]
+name = "esp-pylib"
+version = "1.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "rich" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b7/f1/f01bc72408264940589976e1973ca0c978fdc77ef377cca01a0cc42c9418/esp_pylib-1.2.1.tar.gz", hash = "sha256:c0854cc57b86e2745e9f7ac820d5d5e8a9f2c2d93caf12623c419b8d08d852f6", size = 100567, upload-time = "2026-11-02T15:16:05.792Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/73/9b/7ecb4bf9b563431aa9c0b5f3579b57d1f6d2a9903f5c1f2d951d977561bf/esp_pylib-1.2.1-py3-none-any.whl", hash = "sha256:fb05017676200e38dc182013c994e62d9088d377081c88562e14a2f5aaae6456", size = 59344, upload-time = "2026-11-02T15:16:04.488Z" },
+]
+
+[package.optional-dependencies]
+cli = [
+    { name = "click" },
+    { name = "rich-click" },
+]
+ide = [
+    { name = "websockets" },
+]
+serial = [
+    { name = "pyserial" },
+]
+
+[[package]]
+name = "esptool"
+version = "5.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "cryptography" },
+    { name = "esp-pylib", extra = ["cli", "ide", "serial"] },
+    { name = "intelhex" },
+    { name = "pyserial" },
+    { name = "pyyaml" },
+    { name = "reedsolo" },
+    { name = "rich-click" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/96/4c/a949409e527b87f863f237cea9f997d25644607f799293a3d247f1b40e67/esptool-5.6.0.tar.gz", hash = "sha256:86c7249e9cc3a824e032ede9ba20abad057a2c49e231418cc4f02b177bb36f42", size = 532408, upload-time = "2026-10-15T15:06:33Z" }
+
+[[package]]
 name = "exceptiongroup"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
@@ -857,6 +910,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/72/34/14ca021ce8e5dfedc35312d08ba8bf51fdd999c576889fc2c24cb97f4f10/iniconfig-2.3.0.tar.gz", hash = "sha256:c76315c77db068650d49c5b56314774a7804df16fee4402c1f19d6d15d8c4730", size = 20503, upload-time = "2025-10-18T21:55:43.219Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/cb/b1/3846dd7f199d53cb17f49cba7e651e9ce294d8497c8c150530ed11865bb8/iniconfig-2.3.0-py3-none-any.whl", hash = "sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12", size = 7484, upload-time = "2025-10-18T21:55:41.639Z" },
+]
+
+[[package]]
+name = "intelhex"
+version = "2.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/66/37/1e7522494557d342a24cb236e2aec5d078fac8ed03ad4b61372586406b01/intelhex-2.3.0.tar.gz", hash = "sha256:892b7361a719f4945237da8ccf754e9513db32f5628852785aea108dcd250093", size = 44513, upload-time = "2020-10-20T20:35:51.526Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/97/78/79461288da2b13ed0a13deb65c4ad1428acb674b95278fa9abf1cefe62a2/intelhex-2.3.0-py2.py3-none-any.whl", hash = "sha256:87cc5225657524ec6361354be928adfd56bcf2a3dcc646c40f8f094c39c07db4", size = 50914, upload-time = "2020-10-20T20:35:50.162Z" },
 ]
 
 [[package]]
@@ -1927,6 +1989,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pyserial"
+version = "3.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1e/7d/ae3f0a63f41e4d2f6cb66a5b57197850f919f59e558159a4dd3a818f5082/pyserial-3.5.tar.gz", hash = "sha256:3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb", size = 159125, upload-time = "2020-11-23T03:59:15.045Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/07/bc/587a445451b253b285629263eb51c2d8e9bcea4fc97826266d186f96f558/pyserial-3.5-py2.py3-none-any.whl", hash = "sha256:c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0", size = 90585, upload-time = "2020-11-23T03:59:13.41Z" },
+]
+
+[[package]]
 name = "pytest"
 version = "9.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2063,6 +2134,15 @@ wheels = [
 ]
 
 [[package]]
+name = "reedsolo"
+version = "1.7.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f7/61/a67338cbecf370d464e71b10e9a31355f909d6937c3a8d6b17dd5d5beb5e/reedsolo-1.7.0.tar.gz", hash = "sha256:c1359f02742751afe0f1c0de9f0772cc113835aa2855d2db420ea24393c87732", size = 59723, upload-time = "2023-01-17T05:10:19.733Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/09/19/1bb346c0e581557c88946d2bb979b2bee8992e72314cfb418b5440e383db/reedsolo-1.7.0-py3-none-any.whl", hash = "sha256:2b6a3e402a1ee3e1eea3f932f81e6c0b7bbc615588074dca1dbbcdeb055002bd", size = 32360, upload-time = "2023-01-17T05:10:17.652Z" },
+]
+
+[[package]]
 name = "referencing"
 version = "0.37.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2087,6 +2167,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c0/8f/0722ca900cc807c13a6a0c696dacf35430f72e0ec571c4275d2371fca3e9/rich-15.0.0.tar.gz", hash = "sha256:edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36", size = 230680, upload-time = "2026-04-12T08:24:00.75Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/82/3b/64d4899d73f91ba49a8c18a8ff3f0ea8f1c1d75481760df8c68ef5235bf5/rich-15.0.0-py3-none-any.whl", hash = "sha256:33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb", size = 310654, upload-time = "2026-04-12T08:24:02.83Z" },
+]
+
+[[package]]
+name = "rich-click"
+version = "1.9.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "rich" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/96/3e/5688fdd83aea416de336582a274f2bc8236b5c261b04c11e17bc262786ad/rich_click-1.9.9.tar.gz", hash = "sha256:324cba7513cd4187ee92b2eef21f071714e45be062458c8b157bd7e0c81103e3", size = 75866, upload-time = "2026-09-05T19:20:14.799Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b5/51/b2b91aec091e86bc961e5164f00207d89f133cc82b5ddad541d2132ea819/rich_click-1.9.9-py3-none-any.whl", hash = "sha256:365e7a9d0adb42e41ea832a0a12e02c44c079a26536dee688125eb9814f97274", size = 71910, upload-time = "2026-09-05T19:20:13.587Z" },
 ]
 
 [[package]]
@@ -2294,6 +2389,10 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+provision = [
+    { name = "esp-idf-nvs-partition-gen" },
+    { name = "esptool" },
+]
 stt = [
     { name = "opuslib" },
 ]
@@ -2340,6 +2439,8 @@ dev = [
 requires-dist = [
     { name = "aiohttp", specifier = ">=3" },
     { name = "av", marker = "extra == 'stt-faster-whisper'", specifier = ">=11,<19" },
+    { name = "esp-idf-nvs-partition-gen", marker = "extra == 'provision'", specifier = ">=0.1" },
+    { name = "esptool", marker = "extra == 'provision'", specifier = ">=5" },
     { name = "faster-whisper", marker = "extra == 'stt-faster-whisper'", specifier = ">=1.0" },
     { name = "httpx", marker = "extra == 'tts'", specifier = ">=0.27" },
     { name = "mcp", specifier = ">=1.27,<2.0" },
@@ -2362,7 +2463,7 @@ requires-dist = [
     { name = "websockets", specifier = ">=12" },
     { name = "zeroconf", specifier = ">=0.149" },
 ]
-provides-extras = ["tts", "tts-voicevox", "tts-irodori", "tts-elevenlabs", "tts-fish-audio", "stt", "stt-faster-whisper", "stt-openai"]
+provides-extras = ["tts", "tts-voicevox", "tts-irodori", "tts-elevenlabs", "tts-fish-audio", "stt", "stt-faster-whisper", "stt-openai", "provision"]
 
 [package.metadata.requires-dev]
 dev = [

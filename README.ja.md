@@ -223,7 +223,14 @@ instance を試し続ける場合があります。
 
 3. **接続済み状態で runtime MCP tool を使う**: `gateway_config_get` は `websocket.url`、`websocket.fallback_url`、token が設定済みかどうか、`force_mode`、`discovery_enabled`、現在接続している candidate URL を返します。token の値そのものは返しません。`gateway_config_set` は任意の `url`、`fallback_url`、`token` 文字列を受け取ります。空文字を渡すとその NVS key を clear します。たとえば `url=""` で primary NVS URL を clear すると、次回 reconnect で mDNS discovery path が復帰します。変更はすぐ永続化されますが、disconnect / reconnect / reboot は発火しません。
 
-4. **NVS に直接 `websocket.url` / `websocket.fallback_url` / `websocket.token` を書き込む（上級者向け）**: 例えば独自の NVS 書き込みツールをシリアル経由で使うケース。WiFi 設定 UI や runtime MCP tool と同じ永続化セマンティクス。バッチ provisioning などで主に使います。
+4. **`stackchan-mcp provision` で USB 経由で書き込む**: WiFi 設定ホットスポットにスマホから接続できない場合は、ロボットを gateway ホストに USB で接続して以下を実行します:
+
+   ```bash
+   uv tool install --force 'stackchan-mcp[provision]'   # esptool と NVS 生成ツールを追加
+   stackchan-mcp provision --ssid "<2.4 GHz のネットワーク名>"
+   ```
+
+   WiFi パスワードは対話入力（または `STACKCHAN_WIFI_PASSWORD`）、token は `STACKCHAN_TOKEN` から取得し、`wifi.ssid` / `wifi.password`、`websocket.url`（`ws://<検出した LAN IP>:<WS_PORT>/`）、`websocket.token`、gateway の「更新なし」エンドポイントを指す `wifi.ota_url` を書き込みます。NVS パーティション全体を置き換えるため（音量やタッチ調整は既定値に戻ります）、書き込み前に旧パーティションを `~/.stackchan/backups/` に保存します。`--dry-run` で内容を確認でき、`--gateway-host` / `--port` で検出結果を上書きできます。Espressif の `esp-idf-nvs-partition-gen` で NVS イメージを自作する場合も同じキーを使います。
 
 5. **一時的なソース hardcode (非推奨)**: `websocket_protocol.cc` を編集すればローカル実験はアンブロックできますが、commit には残さないようにしてください。
 
