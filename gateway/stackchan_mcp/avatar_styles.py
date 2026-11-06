@@ -1,5 +1,9 @@
 """Procedurally drawn avatar sets for ``load_avatar_set``.
 
+The ``idle`` expression is drawn asleep (closed eyes, a small "z"), so a
+robot with nothing to do dozes instead of staring; use ``happy`` as the
+awake resting face.
+
 Builds a 90-frame "matrix" payload (6 faces x 3 eye states x 5 mouth
 shapes, 160x120 RGB565 little-endian, index = face * 15 + eyes * 5 + mouth)
 from simple vector shapes, so a new look needs no artwork and no firmware
@@ -169,6 +173,12 @@ STROKE = 4.0
 
 
 def _draw_eye(c: _Canvas, s: Style, cx, cy, face, eyes):
+    if face == "idle":
+        # "idle" is the resting state, drawn asleep so the robot does not
+        # stare. Every eye state is closed, so autonomous blinks are invisible.
+        r = s.eye_r
+        c.fill(_arc(cx, cy - r * 0.5, r, STROKE, up=False), s.fg)
+        return
     r = s.eye_r * (1.35 if face == "surprised" else 1.0)
     if face == "thinking":
         cx, cy = cx + 4, cy - 4  # glancing up and to the side
@@ -234,6 +244,8 @@ def _draw_mouth(c: _Canvas, s: Style, face, mouth):
             c.fill(_ellipse(x, y, 6, 7), s.fg)
         elif face == "thinking":
             c.fill(_segment(x - 7, y + 1, x + 7, y - 2, STROKE), s.fg)
+        elif face == "idle":
+            c.fill(_ellipse(x, y, 4, 3), s.fg)
         elif face == "embarrassed":
             for i in range(3):  # small wavy mouth
                 c.fill(_arc(x - 8 + i * 8, y, 4, 3.0, up=i % 2 == 1), s.fg)
@@ -248,6 +260,13 @@ def _draw_mouth(c: _Canvas, s: Style, face, mouth):
     sizes = {"half": (11, 5), "open": (12, 10), "e": (17, 5), "u": (6, 8)}
     rx, ry = sizes[mouth]
     c.fill(_ellipse(x, y, rx, ry), s.fg)
+
+
+def _draw_z(c: _Canvas, s: Style, x, y, size):
+    t = 2.2
+    c.fill(_segment(x, y, x + size, y, t), s.fg)
+    c.fill(_segment(x + size, y, x, y + size, t), s.fg)
+    c.fill(_segment(x, y + size, x + size, y + size, t), s.fg)
 
 
 def render(style: Style, face: str, eyes: str, mouth: str) -> np.ndarray:
@@ -274,6 +293,10 @@ def render(style: Style, face: str, eyes: str, mouth: str) -> np.ndarray:
     _draw_eye(c, style, EYE_L, EYE_Y, face, eyes)
     _draw_eye(c, style, EYE_R, EYE_Y, face, eyes)
     _draw_mouth(c, style, face, mouth)
+    if face == "idle":
+        zx = 104 if style.decor == "kitty" else 132  # clear of the cat ears
+        _draw_z(c, style, zx, 22, 7)
+        _draw_z(c, style, zx + 14, 10, 5)
     if style.decor == "kitty":
         for dy, tilt in ((-3, -3), (2, 0), (7, 3)):
             c.fill(_segment(EYE_L - 30, MOUTH_Y + dy + tilt, EYE_L - 8, MOUTH_Y + dy, 2.0), style.fg)
