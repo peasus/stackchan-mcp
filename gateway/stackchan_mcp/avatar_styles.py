@@ -67,6 +67,16 @@ STYLES = {
         always_blush=True,
         decor="kitty",
     ),
+    # Warm clay-on-cream palette with sparkle-burst eyes for happy/thinking.
+    "clay": Style(
+        "clay",
+        (244, 240, 230),
+        (217, 119, 87),
+        (238, 170, 145),
+        "circle",
+        11.0,
+        decor="clay",
+    ),
     "starry": Style(
         "starry",
         (18, 22, 58),
@@ -162,6 +172,10 @@ def _draw_eye(c: _Canvas, s: Style, cx, cy, face, eyes):
     r = s.eye_r * (1.35 if face == "surprised" else 1.0)
     if face == "thinking":
         cx, cy = cx + 4, cy - 4  # glancing up and to the side
+    if s.decor == "clay" and face in ("happy", "thinking", "surprised") and eyes == "open":
+        burst = r * {"surprised": 1.7, "happy": 1.45}.get(face, 1.2)
+        c.fill(_star(cx, cy, burst, burst * 0.42, points=10), s.fg)
+        return
     if s.decor == "starry" and face in ("happy", "surprised") and eyes == "open":
         c.fill(_star(cx, cy, r * 1.5, r * 0.6), s.fg)
         return
@@ -191,6 +205,8 @@ def _draw_eye(c: _Canvas, s: Style, cx, cy, face, eyes):
 
 
 def _draw_brows(c: _Canvas, s: Style, face):
+    if s.decor == "clay" and face == "thinking":
+        return  # the sparkle eyes say "thinking" on their own
     y = EYE_Y - 18
     if face == "sad":
         c.fill(_segment(EYE_L - 10, y + 2, EYE_L + 8, y - 4, 3.0), s.fg)

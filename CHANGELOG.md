@@ -33,7 +33,7 @@ documented-only.
 ### Gateway
 
 - Add `python -m stackchan_mcp.avatar_styles <style>`: draws a full
-  90-frame matrix avatar set (classic, kitty, starry, cartoon, retro) from
+  90-frame matrix avatar set (classic, clay, kitty, starry, cartoon, retro) from
   vector shapes with numpy, ready for `load_avatar_set(mode="matrix")`.
   No artwork or firmware rebuild needed; `--preview` writes a contact sheet.
 - Add `stackchan-mcp provision` (with the new `provision` extra) to write
