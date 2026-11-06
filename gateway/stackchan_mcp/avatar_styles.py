@@ -48,7 +48,9 @@ class Style:
 
 
 STYLES = {
-    "classic": Style("classic", (238, 234, 222), (20, 20, 24), (240, 150, 160), "circle", 11.0),
+    "classic": Style(
+        "classic", (238, 234, 222), (20, 20, 24), (240, 150, 160), "circle", 11.0
+    ),
     "retro": Style("retro", (8, 10, 18), (70, 225, 255), (255, 90, 160), "rect", 11.0),
     "cartoon": Style(
         "cartoon",
@@ -93,7 +95,7 @@ STYLES = {
 }
 
 # Supersampled pixel-centre grid, in 160x120 units.
-_ys, _xs = np.mgrid[0:H * SS, 0:W * SS].astype(np.float32)
+_ys, _xs = np.mgrid[0 : H * SS, 0 : W * SS].astype(np.float32)
 X = (_xs + 0.5) / SS
 Y = (_ys + 0.5) / SS
 
@@ -147,10 +149,22 @@ def _triangle(ax, ay, bx, by, cx_, cy_):
 
     e1, e2, e3 = edge(ax, ay, bx, by), edge(bx, by, cx_, cy_), edge(cx_, cy_, ax, ay)
     # Either winding: inside means all edges agree in sign.
-    return np.minimum(np.maximum(np.maximum(e1, e2), e3), np.maximum(np.maximum(-e1, -e2), -e3))
+    return np.minimum(
+        np.maximum(np.maximum(e1, e2), e3), np.maximum(np.maximum(-e1, -e2), -e3)
+    )
 
 
-_STARS = [(12, 14), (30, 100), (70, 10), (100, 112), (140, 20), (152, 70), (6, 60), (124, 96), (88, 30)]
+_STARS = [
+    (12, 14),
+    (30, 100),
+    (70, 10),
+    (100, 112),
+    (140, 20),
+    (152, 70),
+    (6, 60),
+    (124, 96),
+    (88, 30),
+]
 
 
 class _Canvas:
@@ -182,7 +196,11 @@ def _draw_eye(c: _Canvas, s: Style, cx, cy, face, eyes):
     r = s.eye_r * (1.35 if face == "surprised" else 1.0)
     if face == "thinking":
         cx, cy = cx + 4, cy - 4  # glancing up and to the side
-    if s.decor == "clay" and face in ("happy", "thinking", "surprised") and eyes == "open":
+    if (
+        s.decor == "clay"
+        and face in ("happy", "thinking", "surprised")
+        and eyes == "open"
+    ):
         burst = r * {"surprised": 1.7, "happy": 1.45}.get(face, 1.2)
         c.fill(_star(cx, cy, burst, burst * 0.42, points=10), s.fg)
         return
@@ -225,13 +243,21 @@ def _draw_brows(c: _Canvas, s: Style, face):
         c.fill(_segment(EYE_L - 9, y - 1, EYE_L + 9, y - 1, 3.0), s.fg)
         c.fill(_segment(EYE_R - 9, y - 6, EYE_R + 9, y - 2, 3.0), s.fg)
     elif face == "surprised":
-        c.fill(_arc(EYE_L, y - 3, 10, 3.0, up=True), s.fg)
-        c.fill(_arc(EYE_R, y - 3, 10, 3.0, up=True), s.fg)
+        by = y - 3
+        if s.decor == "clay":
+            # Sit the brows clear of the big sparkle-burst eyes.
+            by = EYE_Y - s.eye_r * 1.35 * 1.7 - 4
+        c.fill(_arc(EYE_L, by, 10, 3.0, up=True), s.fg)
+        c.fill(_arc(EYE_R, by, 10, 3.0, up=True), s.fg)
 
 
 def _draw_mouth(c: _Canvas, s: Style, face, mouth):
     x, y = MOUTH_X, MOUTH_Y
-    if mouth == "closed" and s.decor == "kitty" and face in ("idle", "happy", "thinking"):
+    if (
+        mouth == "closed"
+        and s.decor == "kitty"
+        and face in ("idle", "happy", "thinking")
+    ):
         c.fill(_arc(x - 6, y - 3, 6, STROKE * 0.8, up=False), s.fg)
         c.fill(_arc(x + 6, y - 3, 6, STROKE * 0.8, up=False), s.fg)
         return
@@ -299,8 +325,14 @@ def render(style: Style, face: str, eyes: str, mouth: str) -> np.ndarray:
         _draw_z(c, style, zx + 14, 10, 5)
     if style.decor == "kitty":
         for dy, tilt in ((-3, -3), (2, 0), (7, 3)):
-            c.fill(_segment(EYE_L - 30, MOUTH_Y + dy + tilt, EYE_L - 8, MOUTH_Y + dy, 2.0), style.fg)
-            c.fill(_segment(EYE_R + 30, MOUTH_Y + dy + tilt, EYE_R + 8, MOUTH_Y + dy, 2.0), style.fg)
+            c.fill(
+                _segment(EYE_L - 30, MOUTH_Y + dy + tilt, EYE_L - 8, MOUTH_Y + dy, 2.0),
+                style.fg,
+            )
+            c.fill(
+                _segment(EYE_R + 30, MOUTH_Y + dy + tilt, EYE_R + 8, MOUTH_Y + dy, 2.0),
+                style.fg,
+            )
     return c.rgb()
 
 
@@ -328,7 +360,12 @@ def _write_png(path: Path, rgb: np.ndarray) -> None:
     raw = b"".join(b"\x00" + rgb[y].tobytes() for y in range(h))
 
     def chunk(tag, data):
-        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data))
+        return (
+            struct.pack(">I", len(data))
+            + tag
+            + data
+            + struct.pack(">I", zlib.crc32(tag + data))
+        )
 
     png = b"\x89PNG\r\n\x1a\n"
     png += chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
@@ -345,7 +382,10 @@ def contact_sheet(frames: list[np.ndarray], scale: int = 2) -> np.ndarray:
     for f in range(len(FACES)):
         tiles = [frames[f * 15 + e * 5 + m] for e, m in picks]
         row = np.concatenate(
-            [np.pad(t, ((gap, gap), (gap, gap), (0, 0)), constant_values=128) for t in tiles],
+            [
+                np.pad(t, ((gap, gap), (gap, gap), (0, 0)), constant_values=128)
+                for t in tiles
+            ],
             axis=1,
         )
         rows.append(row)
@@ -356,8 +396,12 @@ def contact_sheet(frames: list[np.ndarray], scale: int = 2) -> np.ndarray:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("style", choices=sorted(STYLES))
-    ap.add_argument("--out", type=Path, default=Path.home() / ".stackchan" / "avatar_sets")
-    ap.add_argument("--preview", action="store_true", help="Also write a contact-sheet PNG.")
+    ap.add_argument(
+        "--out", type=Path, default=Path.home() / ".stackchan" / "avatar_sets"
+    )
+    ap.add_argument(
+        "--preview", action="store_true", help="Also write a contact-sheet PNG."
+    )
     args = ap.parse_args(argv)
     args.out.mkdir(parents=True, exist_ok=True)
     payload, frames = build_matrix(STYLES[args.style])

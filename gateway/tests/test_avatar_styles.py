@@ -23,7 +23,11 @@ def test_matrix_payload_matches_firmware_layout(style):
 def test_matrix_index_order_is_face_eyes_mouth():
     s = av.STYLES["classic"]
     _, frames = av.build_matrix(s)
-    face, eyes, mouth = av.FACES.index("sad"), av.EYES.index("half"), av.MOUTHS.index("open")
+    face, eyes, mouth = (
+        av.FACES.index("sad"),
+        av.EYES.index("half"),
+        av.MOUTHS.index("open"),
+    )
     expected = av.render(s, "sad", "half", "open")
     assert np.array_equal(frames[face * 15 + eyes * 5 + mouth], expected)
 
