@@ -71,12 +71,12 @@ STYLES = {
         always_blush=True,
         decor="kitty",
     ),
-    # Warm clay-on-cream palette with sparkle-burst eyes for happy/thinking.
+    # Warm clay on a near-black background (blends with the bezel) with sparkle-burst eyes for happy/thinking.
     "clay": Style(
         "clay",
-        (244, 240, 230),
-        (217, 119, 87),
-        (238, 170, 145),
+        (28, 25, 23),
+        (226, 128, 94),
+        (120, 62, 50),
         "circle",
         11.0,
         decor="clay",
